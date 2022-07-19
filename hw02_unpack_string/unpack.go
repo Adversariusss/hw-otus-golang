@@ -7,7 +7,6 @@ import (
 	"unicode"
 )
 
-
 var (
 	ErrInvalidString = errors.New("invalid string")
 	ErrAtoi          = errors.New("error convert str to int")
