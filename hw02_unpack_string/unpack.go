@@ -8,35 +8,54 @@ import (
 )
 
 var (
-	ErrInvalidString = errors.New("invalid string")
-	ErrAtoi          = errors.New("error convert str to int")
+	ErrFirstCharIsDigit = errors.New("first char is digit")
+	ErrTwoDigits        = errors.New("two digits in a string")
 )
 
-func Unpack(input string) (string, error) {
-	var b strings.Builder
-	var first rune
+func Unpack(str string) (string, error) {
+	if str == "" {
+		return "", nil
+	}
 
-	for _, r := range input {
-		if !unicode.IsDigit(r) {
-			if first != 0 {
-				b.WriteRune(first)
-			}
-			first = r
-		}
-		if unicode.IsDigit(r) {
-			if first == 0 {
-				return "", ErrInvalidString
-			}
-			s, err := strconv.Atoi(string(r))
-			if err != nil {
-				return "", ErrAtoi
-			}
-			b.WriteString(strings.Repeat(string(first), s))
-			first = 0
-		}
+	runeStr := []rune(str)
+
+	if unicode.IsDigit(runeStr[0]) {
+		return "", ErrFirstCharIsDigit
 	}
-	if first != 0 {
-		b.WriteRune(first)
+
+	var result strings.Builder
+	var digitCounter int
+
+	for i, char := range runeStr {
+		if unicode.IsDigit(char) {
+			digitCounter++
+
+			if digitCounter > 1 {
+				return "", ErrTwoDigits
+			}
+
+			continue
+		}
+
+		if i == len(runeStr)-1 {
+			result.WriteRune(char)
+			continue
+		}
+
+		nextChar := runeStr[i+1]
+
+		digit, err := strconv.Atoi(string(nextChar))
+		if err != nil {
+			result.WriteRune(char)
+			continue
+		}
+
+		digitCounter = 0
+		if digit <= 0 {
+			continue
+		}
+
+		result.WriteString(strings.Repeat(string(char), digit))
 	}
-	return b.String(), nil
+	return result.String(), nil
 }
