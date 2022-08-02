@@ -11,13 +11,12 @@ type Cache interface {
 }
 
 type lruCache struct {
-	Cache // Remove me after realization.
-
 	mu       sync.Mutex
 	capacity int
 	queue    List
 	items    map[Key]*ListItem
 }
+
 type cacheItem struct {
 	key   Key
 	value interface{}

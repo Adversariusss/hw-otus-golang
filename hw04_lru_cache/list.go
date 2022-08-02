@@ -48,7 +48,6 @@ func (list *doublelist) Clear() {
 }
 
 func (list *doublelist) PushFront(values interface{}) *ListItem {
-	//for _, value := range values {
 	newListItem := &ListItem{Value: values, Next: list.first, Prev: nil}
 	if list.len == 0 {
 		list.first = newListItem
@@ -62,7 +61,6 @@ func (list *doublelist) PushFront(values interface{}) *ListItem {
 }
 
 func (list *doublelist) PushBack(values interface{}) *ListItem {
-
 	newElement := &ListItem{Value: values, Prev: list.last, Next: nil}
 	if list.len == 0 {
 		list.first = newElement
@@ -76,7 +74,6 @@ func (list *doublelist) PushBack(values interface{}) *ListItem {
 }
 
 func (list *doublelist) Remove(i *ListItem) {
-
 	if list.len == 1 {
 		list.Clear()
 		return
