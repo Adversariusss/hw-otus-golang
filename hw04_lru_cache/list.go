@@ -13,7 +13,7 @@ type List interface {
 type doublelist struct {
 	first *ListItem
 	last  *ListItem
-	size  int
+	len   int
 }
 
 type ListItem struct {
@@ -22,58 +22,62 @@ type ListItem struct {
 	Next  *ListItem
 }
 
+func NewList() List {
+	return new(doublelist)
+}
+
 func (list *doublelist) Len() int {
 	if list == nil {
 		return 0
 	}
-	return list.size
+	return list.len
 }
 
-func (list *doublelist) Front() interface{} {
+func (list *doublelist) Front() *ListItem {
 	return list.first
 }
 
-func (list *doublelist) Back() interface{} {
+func (list *doublelist) Back() *ListItem {
 	return list.last
 }
 
 func (list *doublelist) Clear() {
 	list.first = nil
 	list.last = nil
-	list.size = 0
+	list.len = 0
 }
 
 func (list *doublelist) PushFront(values interface{}) *ListItem {
 	//for _, value := range values {
 	newListItem := &ListItem{Value: values, Next: list.first, Prev: nil}
-	if list.size == 0 {
+	if list.len == 0 {
 		list.first = newListItem
 		list.last = newListItem
 	} else {
 		list.first.Prev = newListItem
 		list.first = newListItem
 	}
-	list.size++
+	list.len++
 	return list.first
 }
 
 func (list *doublelist) PushBack(values interface{}) *ListItem {
 
 	newElement := &ListItem{Value: values, Prev: list.last, Next: nil}
-	if list.size == 0 {
+	if list.len == 0 {
 		list.first = newElement
 		list.last = newElement
 	} else {
 		list.last.Next = newElement
 		list.last = newElement
 	}
-	list.size++
+	list.len++
 	return list.last
 }
 
 func (list *doublelist) Remove(i *ListItem) {
 
-	if list.size == 1 {
+	if list.len == 1 {
 		list.Clear()
 		return
 	}
@@ -94,15 +98,11 @@ func (list *doublelist) Remove(i *ListItem) {
 			i.Prev.Next = i.Next
 		}
 
-		list.size--
+		list.len--
 	}
 }
 
-func (list *doublelist) MoveToFron(i *ListItem) {
+func (list *doublelist) MoveToFront(i *ListItem) {
 	list.Remove((i))
 	list.PushFront(i.Value)
-}
-
-func NewList() List {
-	return new(list)
 }
